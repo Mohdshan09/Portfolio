@@ -14,12 +14,12 @@ export const profile: Profile = {
   summary:
     'Full-stack developer with hands-on experience building scalable web applications and ' +
     'AI-powered platforms — including content generation systems and machine-learning-based ' +
-    'tools — using the MERN stack and Next.js. Strong in RESTful APIs, authentication systems, ' +
-    'and production-ready ERP, SaaS, and e-commerce platforms, backed by a solid foundation in ' +
-    'Data Structures.',
+    'applications — using the MERN stack and Next.js. Proficient in React.js, Node.js, ' +
+    'PostgreSQL, and MongoDB, with strong expertise in RESTful APIs and authentication systems. ' +
+    'Experienced in developing production-ready ERP systems, SaaS platforms, and e-commerce ' +
+    'applications, with a strong foundation in Data Structures.',
   location: 'Raipur, IN',
   email: 'mohdshan1024@gmail.com',
-  phone: '+91 91094 62934',
   socials: {
     linkedin: 'https://www.linkedin.com/in/mohdshan09',
   },
@@ -30,11 +30,11 @@ export const profile: Profile = {
 export const skills: SkillGroup[] = [
   {
     category: 'language',
-    items: ['Java', 'Python', 'C', 'C++', 'HTML', 'CSS', 'JavaScript', 'TypeScript'],
+    items: ['C', 'C++', 'HTML', 'CSS', 'JavaScript', 'TypeScript'],
   },
   {
     category: 'framework',
-    items: ['React.js', 'Node.js', 'Express.js', 'Next.js', 'Tailwind CSS'],
+    items: ['React.js', 'Node.js', 'Express.js', 'Next.js'],
   },
   { category: 'database', items: ['MongoDB', 'PostgreSQL'] },
   { category: 'tool', items: ['NumPy', 'Pandas', 'Matplotlib'] },
@@ -47,16 +47,16 @@ export const skills: SkillGroup[] = [
 export const experience: Experience[] = [
   {
     company: 'BHN System and Solution Pvt. Ltd.',
-    role: 'Full-Stack Developer Intern',
+    role: 'Jr. Software Developer Intern',
     type: 'internship',
     startDate: '2025-10',
     endDate: null,
     bullets: [
-      'Developing a full-stack School ERP system using Next.js, PostgreSQL, Prisma, and Tailwind CSS',
-      'Implementing secure authentication and role-based access control for admins, teachers, and parents',
-      'Designing responsive UI components ensuring a seamless experience across devices',
+      'Develop a full-stack School ERP system using Next.js, PostgreSQL, Prisma, and Tailwind CSS',
+      'Build Student Management, Transport Management, session migration (student promotion), and a reporting module with 10+ reports',
+      'Migrate legacy data by cleaning raw Excel files into SQL for PostgreSQL, and implement role-based access with NextAuth for admins, teachers, and parents',
     ],
-    techStack: ['Next.js', 'PostgreSQL', 'Prisma', 'Tailwind CSS'],
+    techStack: ['Next.js', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'NextAuth'],
     liveUrl: 'https://eduerp.net/',
   },
   {
@@ -66,21 +66,42 @@ export const experience: Experience[] = [
     startDate: '2025-03',
     endDate: '2025-05',
     bullets: [
-      'Designed and developed a full-stack e-commerce website with responsive UI components using JavaScript and React.js',
-      'Integrated backend services using Node.js and Express.js',
+      "Built the product database from scratch for the company's e-commerce website using MongoDB",
+      "Designed RESTful APIs with Node.js and Express.js for the website's backend and integrated them with the React frontend",
       'Implemented product listings, cart system, and user authentication',
     ],
-    techStack: ['React.js', 'Node.js', 'Express.js', 'JavaScript'],
+    techStack: ['MongoDB', 'Node.js', 'Express.js', 'React.js'],
     liveUrl: 'https://forever-frontendv3.vercel.app',
   },
 ];
 
 export const projects: Project[] = [
   {
+    slug: 'eduerp',
+    title: 'EduERP',
+    shortDescription:
+      'School ERP serving 6+ schools in Gariaband district — reports, session rollover, and legacy data import.',
+    role: 'Full-Stack Developer',
+    techStack: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind CSS'],
+    highlights: [
+      'Develop and maintain a full-stack School ERP serving 6+ schools in Gariaband district, working with the backend team to integrate APIs and deliver complete features',
+      'Migrate legacy school data by cleaning and transforming raw, inconsistent Excel files into SQL queries for bulk import into PostgreSQL, keeping the data accurate for each onboarded school',
+      'Build and maintain a reporting module with 10+ school reports, letting administrators generate academic and administrative records from a single interface',
+      'Design ERP-style dashboard interfaces with Next.js, TypeScript, and Tailwind CSS, optimized for data-heavy workflows and responsive across devices',
+      'Develop a session migration feature that promotes students to the next academic session, automating the year-end rollover for each school',
+    ],
+    startDate: '2025-10',
+    endDate: null,
+    liveUrl: 'https://eduerp.net/',
+    featured: true,
+    order: 1,
+  },
+  {
     slug: 'examlyst',
     title: 'ExamLyst',
-    shortDescription: 'B2B online assessment platform with AI-resistant integrity monitoring.',
-    role: 'Backend Developer',
+    shortDescription:
+      'Multi-tenant B2B online assessment platform with integrity monitoring — B.Tech major project.',
+    role: 'Full-Stack Developer',
     techStack: [
       'Next.js',
       'TypeScript',
@@ -92,32 +113,15 @@ export const projects: Project[] = [
       'Redis',
     ],
     highlights: [
-      'Managed the PostgreSQL database layer with Prisma for a multi-tenant B2B platform spanning organization, admin, client, user, and candidate roles',
-      'Built a demo-request and onboarding workflow with approve/reject lifecycle management',
-      'Designed secure, role-based and organization-scoped APIs with approval gates across question banks, assessments, and candidate attempts',
-      'Built a question bank and assessment system with CSV import, reusable repositories, scheduling, and integrity/audit tracking',
-      'Built a PDF content repository on Supabase Storage with text chunking, linked to question banks; async processing via BullMQ + Redis',
+      'Built a multi-tenant B2B assessment platform in a team as Full Stack Developer, owning the PostgreSQL database layer with Prisma across organization, admin, client, and candidate workflows',
+      'Implemented an organization onboarding workflow in which companies request demos and admins approve or reject access, backed by role-based, organization-scoped APIs',
+      'Designed and implemented secure role-based and organization-scoped APIs, enforcing authentication, approval gates, and access boundaries across question banks, assessments, candidate attempts, and content management',
+      'Built a question bank and assessment management system with CSV-based question import, reusable question repositories, assessment scheduling, candidate attempts, responses, and integrity/audit tracking',
+      'Developed a PDF content repository using Supabase Storage, with document extraction, text chunking, and reusable linking of source documents to question banks; asynchronous processing handled with BullMQ + Redis',
     ],
     startDate: '2025-11',
     endDate: '2026-02',
     liveUrl: 'https://examlyst.vercel.app/',
-    featured: true,
-    order: 1,
-  },
-  {
-    slug: 'eduerp',
-    title: 'EduERP',
-    shortDescription: 'School management system for admins, teachers, and parents.',
-    role: 'Frontend Developer',
-    techStack: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'NextAuth'],
-    highlights: [
-      'Developing and maintaining user-facing features, integrating with backend APIs',
-      'Delivering production-ready web and mobile features for educational institutions',
-      'Implemented a secure, role-based system with NextAuth for admins, teachers, and parents',
-    ],
-    startDate: '2025-10',
-    endDate: null,
-    liveUrl: 'https://eduerp.net/',
     featured: true,
     order: 2,
   },
@@ -127,11 +131,11 @@ export const projects: Project[] = [
     shortDescription:
       'Full-stack e-commerce site themed around Starry Night and comic superheroes.',
     role: 'Backend Developer',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
+    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JavaScript', 'Tailwind CSS'],
     highlights: [
-      'Built the backend and MongoDB schema for users, products, carts, and orders',
-      'Integrated APIs with the React frontend, resolving data-flow issues',
-      'Shipped product browsing, cart management, authentication, and an admin dashboard',
+      'Contributed backend development and the MongoDB database for core e-commerce workflows, including users, products, carts, and orders',
+      'Collaborated with the frontend developers to integrate APIs with the React application, resolve data-flow issues, and align backend responses with frontend requirements',
+      'Themed around Starry Night aesthetics and comic superheroes, with product browsing, cart management, user authentication, and an admin dashboard',
     ],
     startDate: '2025-03',
     endDate: '2025-05',
@@ -145,11 +149,10 @@ export const projects: Project[] = [
     shortDescription:
       'AI-powered SaaS platform for content generation, resume analysis, and image tools.',
     role: 'Full-Stack Developer',
-    techStack: ['React.js', 'Node.js', 'PostgreSQL', 'NeonDB', 'Clerk', 'Gemini API'],
+    techStack: ['React.js', 'Node.js', 'PostgreSQL', 'NeonDB', 'Clerk', 'REST APIs'],
     highlights: [
-      'Designed and developed a cloud-based SaaS platform integrating multiple AI services',
-      'Built AI-powered features including content generation, object removal, resume analysis, and background removal',
-      'Integrated Clerk for authentication and Gemini APIs for AI-driven functionality',
+      'Designed and developed a cloud-based SaaS platform integrating Artificial Intelligence (AI)',
+      'Built an AI-powered SaaS platform integrating multiple AI services including content generation, object removal, resume analysis, and background removal',
     ],
     startDate: '2024-12',
     endDate: '2024-12',
