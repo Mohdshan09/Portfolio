@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* surfaces — warm charcoal */
+  --bg: #111110;
+  --surface: #191816;
+  --surface-2: #211f1b;
+  /* ink */
+  --ink: #e8e1d2;
+  --ink-dim: #a49d91;
+  --ink-mute: #6e6860;
+  /* structure */
+  --line: #e8e1d2;
+  --line-soft: #403d37;
+  /* accents — one per component */
+  --acid: #c83a32; /* primary: muted brick red */
+  --acid-hover: #e04a41; /* soft red — interactive hover/press states */
+  --signal: #ff5b1f;
+  --amber: #b86f4a; /* dusty orange — subtle accent (tags, terminal output) */
+  --cyan: #4de1ff;
+}
+
+:root[data-theme='light'] {
+  --bg: #efeadf;
+  --surface: #fffdf7;
+  --surface-2: #f2ede1;
+  --ink: #111111;
+  --ink-dim: #4a4640;
+  --ink-mute: #7a766d;
+  --line: #111111;
+  --line-soft: #d8d2c4;
+  --acid: #9c2e27;
+  --acid-hover: #b23930;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+  }
+  ::selection {
+    background: var(--acid);
+    color: #e8e1d2;
+  }
+  :focus-visible {
+    outline: 2px solid var(--acid);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .brut {
+    @apply border-2 border-line shadow-brut transition-[transform,box-shadow] duration-150 ease-snap;
+  }
+  .brut:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 0 var(--acid-hover);
+  }
+  .brut:active {
+    transform: translate(6px, 6px);
+    box-shadow: none;
+  }
+  .meta {
+    @apply font-mono text-meta uppercase text-ink-mute;
+  }
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      transparent 1px 3px
+    );
+  }
+  /* Long-form Markdown (dispatches, now, changelog). Serif only for h2 (≥28px). */
+  .prose-press {
+    @apply text-[1.0625rem] leading-[1.65] text-ink;
+  }
+  .prose-press > * + * {
+    @apply mt-5;
+  }
+  .prose-press h2 {
+    @apply mt-12 font-serif text-4xl leading-tight text-ink;
+  }
+  .prose-press h3 {
+    @apply mt-8 text-2xl font-semibold tracking-tight text-ink;
+  }
+  .prose-press h4 {
+    @apply mt-6 font-mono text-meta uppercase text-ink-dim;
+  }
+  .prose-press a {
+    @apply text-ink underline decoration-acid decoration-2 underline-offset-4 hover:text-acid-hover;
+  }
+  .prose-press strong {
+    @apply font-semibold text-ink;
+  }
+  .prose-press ul {
+    @apply space-y-2;
+  }
+  .prose-press ul > li {
+    @apply relative pl-6;
+  }
+  .prose-press ul > li::before {
+    content: '→';
+    @apply absolute left-0 text-acid;
+  }
+  .prose-press ol {
+    @apply list-decimal space-y-2 pl-6 marker:font-mono marker:text-ink-mute;
+  }
+  .prose-press li > ul,
+  .prose-press li > ol {
+    @apply mt-2;
+  }
+  .prose-press blockquote {
+    @apply my-10 border-l-4 border-signal pl-6 font-serif text-3xl italic leading-snug text-ink;
+  }
+  .prose-press blockquote p {
+    @apply m-0;
+  }
+  .prose-press :not(pre) > code {
+    @apply border border-line-soft bg-surface-2 px-1.5 py-0.5 font-mono text-[0.875em] text-amber;
+  }
+  .prose-press pre {
+    @apply overflow-x-auto border-2 border-line bg-surface p-4 font-mono text-sm leading-relaxed shadow-brut-sm;
+  }
+  .prose-press pre code {
+    @apply text-ink;
+  }
+  .prose-press hr {
+    @apply my-10 border-0 border-t-2 border-line-soft;
+  }
+  .prose-press img {
+    @apply w-full border-2 border-line;
+  }
+  .prose-press table {
+    @apply block w-full overflow-x-auto border-collapse font-mono text-sm;
+  }
+  .prose-press th {
+    @apply border-b-2 border-line px-3 py-2 text-left text-meta uppercase text-ink-dim;
+  }
+  .prose-press td {
+    @apply border-b border-line-soft px-3 py-2 text-ink-dim;
+  }
+  .cursor::after {
+    content: '▌';
+    color: var(--acid);
+    @apply animate-blink ml-1;
+  }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
