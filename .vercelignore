@@ -1,0 +1,9 @@
+# Never upload secrets or local artifacts when deploying with the Vercel CLI.
+**/.env
+**/.env.*
+!**/.env.example
+**/node_modules
+**/dist
+**/coverage
+**/*.log
+.claude
