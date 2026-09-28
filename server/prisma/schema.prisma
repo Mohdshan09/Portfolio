@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Remaining models land here per Module 1 (specs/01-database.md).
+
+/// The single admin account. Set/replace it with `npm run set-admin -w server`.
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique @db.VarChar(254)
+  /// bcrypt, cost 12 — never the plain password.
+  passwordHash String    @db.Char(60)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum MessageStatus {
+  new
+  read
+  archived
+}
+
+/// Contact form submissions (specs/06-contact.md). Shape mirrors `contactSchema` in /shared.
+model Message {
+  id        String        @id @default(cuid())
+  name      String        @db.VarChar(60)
+  email     String        @db.VarChar(254)
+  subject   String?       @db.VarChar(120)
+  body      String        @db.VarChar(2000)
+  /// HMAC-SHA256 of the sender IP with IP_HASH_SALT — never the raw IP.
+  ipHash    String        @db.Char(64)
+  userAgent String?       @db.VarChar(500)
+  status    MessageStatus @default(new)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status, createdAt(sort: Desc)])
+}
