@@ -9,17 +9,6 @@ datasource db {
 
 // Remaining models land here per Module 1 (specs/01-database.md).
 
-/// The single admin account. Set/replace it with `npm run set-admin -w server`.
-model AdminUser {
-  id           String    @id @default(cuid())
-  email        String    @unique @db.VarChar(254)
-  /// bcrypt, cost 12 — never the plain password.
-  passwordHash String    @db.Char(60)
-  lastLoginAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-}
-
 enum MessageStatus {
   new
   read
@@ -41,4 +30,17 @@ model Message {
   updatedAt DateTime      @updatedAt
 
   @@index([status, createdAt(sort: Desc)])
+}
+
+/// One row per public page view (specs: admin analytics). No cookies, no raw IPs.
+model PageView {
+  id           String   @id @default(cuid())
+  path         String   @db.VarChar(200)
+  /// Host of an external referrer only (e.g. "linkedin.com"); null for direct / internal.
+  referrerHost String?  @db.VarChar(100)
+  /// HMAC-SHA256(IP_HASH_SALT, ip + user agent) — counts unique visitors, can't be reversed.
+  visitorHash  String   @db.Char(64)
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
 }

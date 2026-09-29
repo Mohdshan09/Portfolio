@@ -18,6 +18,11 @@ const router = createBrowserRouter([
         index: true,
         lazy: () => import('./pages/admin/AdminInbox').then((m) => ({ Component: m.AdminInbox })),
       },
+      {
+        path: 'analytics',
+        lazy: () =>
+          import('./pages/admin/AdminAnalytics').then((m) => ({ Component: m.AdminAnalytics })),
+      },
     ],
   },
   {

@@ -23,3 +23,15 @@ export const loginLimiter = rateLimit({
     next(new ApiError(429, 'RATE_LIMITED', 'Too many login attempts. Try again in 15 minutes.'));
   },
 });
+
+/** Page-view beacons: generous (SPA navigation), but stops a script from flooding the table. */
+export const trackLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 60,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  // Silent: a dropped page view isn't worth an error on the visitor's console.
+  handler: (_req, res) => {
+    res.status(204).end();
+  },
+});

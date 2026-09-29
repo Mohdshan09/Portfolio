@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import { healthRouter } from './routes/health.routes';
 import { contactRouter } from './routes/contact.routes';
+import { trackRouter } from './routes/track.routes';
 import { authRouter } from './routes/auth.routes';
 import { adminRouter } from './routes/admin.routes';
 import { errorHandler } from './middleware/errorHandler';
@@ -32,6 +33,7 @@ app.use(cookieParser());
 
 app.use('/api/health', healthRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/track', trackRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 

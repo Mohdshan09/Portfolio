@@ -12,6 +12,14 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Framework code changes rarely: its own chunk stays cached across content deploys.
+        manualChunks: { react: ['react', 'react-dom', 'react-router-dom'] },
+      },
+    },
+  },
   test: {
     environment: 'node',
   },

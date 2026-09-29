@@ -4,6 +4,7 @@ import { requireAuth } from '../middleware/requireAuth';
 import { validateBody } from '../middleware/validate';
 import { asyncHandler } from '../utils/asyncHandler';
 import { getMessages, patchMessage, removeMessage } from '../controllers/messages.controller';
+import { getAnalyticsSummary } from '../controllers/analytics.controller';
 
 export const adminRouter = Router();
 
@@ -13,3 +14,4 @@ adminRouter.use(requireAuth);
 adminRouter.get('/messages', asyncHandler(getMessages));
 adminRouter.patch('/messages/:id', validateBody(updateMessageSchema), asyncHandler(patchMessage));
 adminRouter.delete('/messages/:id', asyncHandler(removeMessage));
+adminRouter.get('/analytics', asyncHandler(getAnalyticsSummary));
