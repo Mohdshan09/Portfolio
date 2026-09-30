@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { messageBoxSchema, type UpdateMessageInput } from '@portfolio/shared';
 import { deleteMessage, listMessages, updateMessageStatus } from '../services/messages.service';
 import { ApiError } from '../utils/ApiError';
+import { securityLog } from '../utils/securityLog';
 
 const idSchema = z.string().regex(/^[a-z0-9]{20,40}$/i);
 
@@ -20,11 +21,15 @@ export async function getMessages(req: Request, res: Response) {
 
 export async function patchMessage(req: Request, res: Response) {
   const { status } = req.body as UpdateMessageInput;
-  await updateMessageStatus(parseId(req), status);
+  const id = parseId(req);
+  await updateMessageStatus(id, status);
+  securityLog(req, 'admin.message_status_changed', { messageId: id, status });
   res.json({ success: true, data: null });
 }
 
 export async function removeMessage(req: Request, res: Response) {
-  await deleteMessage(parseId(req));
+  const id = parseId(req);
+  await deleteMessage(id);
+  securityLog(req, 'admin.message_deleted', { messageId: id });
   res.json({ success: true, data: null });
 }

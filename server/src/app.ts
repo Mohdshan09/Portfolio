@@ -9,6 +9,7 @@ import { trackRouter } from './routes/track.routes';
 import { authRouter } from './routes/auth.routes';
 import { adminRouter } from './routes/admin.routes';
 import { errorHandler } from './middleware/errorHandler';
+import { requestContext } from './middleware/requestContext';
 import { ApiError } from './utils/ApiError';
 
 export const app = express();
@@ -17,6 +18,7 @@ export const app = express();
 if (env.NODE_ENV === 'production') app.set('trust proxy', env.TRUST_PROXY_HOPS);
 
 app.use(helmet());
+app.use(requestContext);
 app.use(
   cors({
     // Only our own site may call the API from a browser. Requests without an Origin header

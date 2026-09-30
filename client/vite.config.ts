@@ -13,6 +13,9 @@ export default defineConfig({
     },
   },
   build: {
+    // Never inline assets as data: URIs — the CSP (vercel.json) only allows fonts from 'self',
+    // and Vite's default would embed the <4 KB font subsets straight into the CSS.
+    assetsInlineLimit: 0,
     rollupOptions: {
       output: {
         // Framework code changes rarely: its own chunk stays cached across content deploys.

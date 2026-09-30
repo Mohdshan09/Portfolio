@@ -9,6 +9,7 @@ import {
   verifyRefreshToken,
 } from '../services/auth.service';
 import { ApiError } from '../utils/ApiError';
+import { securityLog } from '../utils/securityLog';
 
 export const REFRESH_COOKIE = 'refresh_token';
 
@@ -27,8 +28,10 @@ function issueSession(res: Response) {
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body as LoginInput;
   if (!(await verifyCredentials(email, password))) {
+    // Logged as `auth.login_failed` by the error handler — without the attempted email.
     throw new ApiError(401, 'INVALID_CREDENTIALS', 'Invalid credentials');
   }
+  securityLog(req, 'auth.login_success');
   issueSession(res);
 }
 
@@ -40,7 +43,8 @@ export async function refresh(req: Request, res: Response) {
   issueSession(res);
 }
 
-export async function logout(_req: Request, res: Response) {
+export async function logout(req: Request, res: Response) {
+  securityLog(req, 'auth.logout');
   res.clearCookie(REFRESH_COOKIE, cookieOptions);
   res.status(200).json({ success: true, data: null });
 }
