@@ -21,6 +21,8 @@ export const analyticsRangeSchema = z.coerce
 export interface AnalyticsResponse {
   days: number;
   totals: { views: number; visitors: number; messages: number };
+  /** Distinct visitors with a page view in the last 5 minutes. */
+  liveVisitors: number;
   /** One entry per day (IST), oldest first, zero-filled. */
   daily: { date: string; views: number; visitors: number }[];
   topPages: { path: string; views: number }[];

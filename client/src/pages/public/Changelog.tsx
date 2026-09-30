@@ -2,11 +2,8 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Markdown } from '../../components/ui/Markdown';
 import { changelog } from '../../content/changelog';
 import { formatDay } from '../../lib/date';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 export function Changelog() {
-  useDocumentTitle('Changelog');
-
   return (
     <main className="mx-auto max-w-[1360px] px-4 py-16 sm:px-6 sm:py-24">
       <PageHeader kicker="CHANGELOG · SITE RELEASES" command="$ git log --oneline --reverse">

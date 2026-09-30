@@ -2,11 +2,8 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Markdown } from '../../components/ui/Markdown';
 import { now } from '../../content/now';
 import { daysSince, formatDay } from '../../lib/date';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 export function Now() {
-  useDocumentTitle('Now');
-
   const age = now.updated ? daysSince(now.updated) : null;
 
   return (
@@ -17,7 +14,10 @@ export function Now() {
         meta={
           now.visible && now.updated ? (
             <>
-              LAST UPDATED {formatDay(now.updated)} · {age === 0 ? 'TODAY' : `${age} DAYS AGO`}
+              {/* "N days ago" is computed at build time in the prerendered HTML. */}
+              <span suppressHydrationWarning>
+                LAST UPDATED {formatDay(now.updated)} · {age === 0 ? 'TODAY' : `${age} DAYS AGO`}
+              </span>
               {now.draft && <span className="ml-3 text-signal">[DRAFT]</span>}
             </>
           ) : undefined

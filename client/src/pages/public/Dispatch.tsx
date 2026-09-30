@@ -4,13 +4,11 @@ import { Tag } from '../../components/ui/Tag';
 import { dispatches, getDispatch } from '../../content/dispatches';
 import { profile } from '../../content/data';
 import { formatDay } from '../../lib/date';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { NotFound } from './NotFound';
 
 export function Dispatch() {
   const { slug = '' } = useParams();
   const dispatch = getDispatch(slug);
-  useDocumentTitle(dispatch?.title);
 
   if (!dispatch) return <NotFound />;
 

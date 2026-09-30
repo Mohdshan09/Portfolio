@@ -14,7 +14,7 @@ export function StatusBar() {
         <span>│</span>
         <span>built with MERN</span>
         <span>│</span>
-        <span>© {year} Mohammad Shan</span>
+        <span suppressHydrationWarning>© {year} Mohammad Shan</span>
         {latestRelease && (
           <>
             <span>│</span>

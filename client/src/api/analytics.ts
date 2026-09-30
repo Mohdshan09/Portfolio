@@ -10,6 +10,6 @@ export function useAnalytics(days: number) {
       return data.data as AnalyticsResponse;
     },
     placeholderData: keepPreviousData, // keep the old chart visible while switching range
-    refetchInterval: 60_000,
+    refetchInterval: 30_000, // near-real-time; the "online now" count covers the last 5 minutes
   });
 }

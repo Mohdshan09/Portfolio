@@ -3,6 +3,7 @@ import type { AnalyticsResponse } from '@portfolio/shared';
 import { useAnalytics } from '../../api/analytics';
 import { cn } from '../../lib/cn';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { isOwnerBrowser, setOwnerBrowser } from '../../lib/analyticsOwner';
 
 const RANGES = [7, 30, 90] as const;
 
@@ -42,6 +43,8 @@ export function AdminAnalytics() {
         </div>
       </div>
 
+      <OwnerToggle />
+
       {analytics.isPending ? (
         <p className="py-10 font-mono text-sm text-ink-dim">fetching analytics…</p>
       ) : analytics.isError ? (
@@ -61,7 +64,20 @@ export function AdminAnalytics() {
 function Dashboard({ data }: { data: AnalyticsResponse }) {
   return (
     <>
-      <dl className="mt-8 grid grid-cols-3 border-2 border-line">
+      <p
+        className="mt-8 flex items-center gap-2 font-mono text-meta text-ink-dim"
+        aria-live="polite"
+      >
+        <span
+          aria-hidden
+          className={cn('h-2 w-2', data.liveVisitors > 0 ? 'animate-blink bg-acid' : 'bg-ink-mute')}
+        />
+        <span className="text-ink">{data.liveVisitors}</span>
+        {data.liveVisitors === 1 ? 'VISITOR' : 'VISITORS'} ONLINE NOW · LAST 5 MIN · UPDATES EVERY
+        30S
+      </p>
+
+      <dl className="mt-3 grid grid-cols-3 border-2 border-line">
         <Stat label="PAGE VIEWS" value={data.totals.views} />
         <Stat label="UNIQUE VISITORS" value={data.totals.visitors} />
         <Stat label="MESSAGES" value={data.totals.messages} />
@@ -214,5 +230,30 @@ function RankedList({
         </ol>
       )}
     </section>
+  );
+}
+
+/** Shows whether this browser's visits are excluded, with a switch for testing tracking. */
+function OwnerToggle() {
+  const [owner, setOwner] = useState(isOwnerBrowser);
+
+  function toggle() {
+    setOwnerBrowser(!owner);
+    setOwner(!owner);
+  }
+
+  return (
+    <p className="mt-4 font-mono text-meta text-ink-mute">
+      {owner
+        ? '> your visits from this browser are not counted.'
+        : '> counting this browser (testing) — resets next time you open admin.'}{' '}
+      <button
+        type="button"
+        onClick={toggle}
+        className="uppercase text-ink-dim underline hover:text-ink"
+      >
+        {owner ? 'count my visits' : 'stop counting me'}
+      </button>
+    </p>
   );
 }

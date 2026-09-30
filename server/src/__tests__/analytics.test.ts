@@ -47,6 +47,25 @@ describe('POST /api/track', () => {
     expect(db.pageView.create).not.toHaveBeenCalled();
   });
 
+  it("doesn't count the owner's own visits (valid admin token)", async () => {
+    const res = await request(app)
+      .post('/api/track')
+      .set('User-Agent', BROWSER)
+      .set('Authorization', `Bearer ${signAccessToken()}`)
+      .send({ path: '/' });
+    expect(res.status).toBe(204);
+    expect(db.pageView.create).not.toHaveBeenCalled();
+  });
+
+  it('still counts a visitor sending a bogus token', async () => {
+    await request(app)
+      .post('/api/track')
+      .set('User-Agent', BROWSER)
+      .set('Authorization', 'Bearer not-a-real-token')
+      .send({ path: '/' });
+    expect(db.pageView.create).toHaveBeenCalledOnce();
+  });
+
   it('rejects a path that is not a site path', async () => {
     expect((await track({ path: 'https://evil.example' })).status).toBe(400);
   });
@@ -81,7 +100,8 @@ describe('GET /api/admin/analytics', () => {
     const today = lastNDays(1)[0]!;
     db.$queryRaw
       .mockResolvedValueOnce([{ views: 5n, visitors: 2n }])
-      .mockResolvedValueOnce([{ day: today, views: 5n, visitors: 2n }]);
+      .mockResolvedValueOnce([{ day: today, views: 5n, visitors: 2n }])
+      .mockResolvedValueOnce([{ live: 1n }]);
     db.pageView.groupBy
       .mockResolvedValueOnce([{ path: '/', _count: { _all: 4 } }])
       .mockResolvedValueOnce([{ referrerHost: 'linkedin.com', _count: { _all: 3 } }]);
@@ -97,6 +117,7 @@ describe('GET /api/admin/analytics', () => {
     expect(res.status).toBe(200);
     const data = res.body.data;
     expect(data.totals).toEqual({ views: 5, visitors: 2, messages: 1 });
+    expect(data.liveVisitors).toBe(1);
     expect(data.daily).toHaveLength(7);
     expect(data.daily.at(-1)).toEqual({ date: today, views: 5, visitors: 2 });
     expect(data.daily[0].views).toBe(0);

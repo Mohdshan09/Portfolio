@@ -7,7 +7,7 @@ import globals from 'globals';
 import prettier from 'eslint-config-prettier';
 
 export default [
-  { ignores: ['**/dist/**', '**/node_modules/**', '**/prisma/migrations/**'] },
+  { ignores: ['**/dist/**', '**/dist-ssr/**', '**/node_modules/**', '**/prisma/migrations/**'] },
   js.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
@@ -26,7 +26,7 @@ export default [
     },
   },
   {
-    files: ['server/**/*.ts'],
+    files: ['server/**/*.ts', 'client/scripts/**/*.mjs'],
     languageOptions: { globals: globals.node },
   },
   {

@@ -5,6 +5,7 @@ import { hashIp } from '../utils/sanitize';
 
 const BOT_UA = /bot|crawl|spider|slurp|headless|lighthouse|preview|facebookexternalhit|curl|wget/i;
 const TZ = 'Asia/Kolkata';
+const LIVE_WINDOW_MS = 5 * 60 * 1000;
 const ownHosts = new Set(env.CLIENT_URL.map((origin) => new URL(origin).host));
 
 interface RecordViewArgs {
@@ -43,37 +44,43 @@ export async function getAnalytics(days: number): Promise<AnalyticsResponse> {
   const since = new Date(`${dayKeys[0]}T00:00:00+05:30`);
   const where = { createdAt: { gte: since } };
 
-  const [totalsRow, dailyRows, topPages, topReferrers, recent, messages] = await Promise.all([
-    prisma.$queryRaw<{ views: bigint; visitors: bigint }[]>`
+  const liveSince = new Date(Date.now() - LIVE_WINDOW_MS);
+
+  const [totalsRow, dailyRows, liveRow, topPages, topReferrers, recent, messages] =
+    await Promise.all([
+      prisma.$queryRaw<{ views: bigint; visitors: bigint }[]>`
       SELECT COUNT(*) AS views, COUNT(DISTINCT "visitorHash") AS visitors
       FROM "PageView" WHERE "createdAt" >= ${since}`,
-    prisma.$queryRaw<{ day: string; views: bigint; visitors: bigint }[]>`
+      prisma.$queryRaw<{ day: string; views: bigint; visitors: bigint }[]>`
       SELECT to_char(("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${TZ}, 'YYYY-MM-DD') AS day,
              COUNT(*) AS views, COUNT(DISTINCT "visitorHash") AS visitors
       FROM "PageView" WHERE "createdAt" >= ${since}
       GROUP BY day ORDER BY day`,
-    prisma.pageView.groupBy({
-      by: ['path'],
-      where,
-      _count: { _all: true },
-      orderBy: { _count: { path: 'desc' } },
-      take: 10,
-    }),
-    prisma.pageView.groupBy({
-      by: ['referrerHost'],
-      where: { ...where, referrerHost: { not: null } },
-      _count: { _all: true },
-      orderBy: { _count: { referrerHost: 'desc' } },
-      take: 10,
-    }),
-    prisma.pageView.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      select: { path: true, referrerHost: true, createdAt: true },
-    }),
-    prisma.message.count({ where }),
-  ]);
+      prisma.$queryRaw<{ live: bigint }[]>`
+      SELECT COUNT(DISTINCT "visitorHash") AS live
+      FROM "PageView" WHERE "createdAt" >= ${liveSince}`,
+      prisma.pageView.groupBy({
+        by: ['path'],
+        where,
+        _count: { _all: true },
+        orderBy: { _count: { path: 'desc' } },
+        take: 10,
+      }),
+      prisma.pageView.groupBy({
+        by: ['referrerHost'],
+        where: { ...where, referrerHost: { not: null } },
+        _count: { _all: true },
+        orderBy: { _count: { referrerHost: 'desc' } },
+        take: 10,
+      }),
+      prisma.pageView.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: 20,
+        select: { path: true, referrerHost: true, createdAt: true },
+      }),
+      prisma.message.count({ where }),
+    ]);
 
   const byDay = new Map(dailyRows.map((r) => [r.day, r]));
   const daily = dayKeys.map((date) => ({
@@ -89,6 +96,7 @@ export async function getAnalytics(days: number): Promise<AnalyticsResponse> {
       visitors: Number(totalsRow[0]?.visitors ?? 0),
       messages,
     },
+    liveVisitors: Number(liveRow[0]?.live ?? 0),
     daily,
     topPages: topPages.map((p) => ({ path: p.path, views: p._count._all })),
     topReferrers: topReferrers.map((r) => ({ host: r.referrerHost!, views: r._count._all })),

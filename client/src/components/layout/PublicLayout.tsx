@@ -3,6 +3,7 @@ import { Masthead } from '../ui/Masthead';
 import { StatusBar } from '../ui/StatusBar';
 import { profile } from '../../content/data';
 import { usePageTracking } from '../../hooks/usePageTracking';
+import { Seo } from '../Seo';
 
 export function PublicLayout() {
   usePageTracking();
@@ -10,6 +11,7 @@ export function PublicLayout() {
   return (
     // Column layout keeps the StatusBar pinned to the bottom on short pages (Now, 404, …).
     <div className="flex min-h-screen flex-col">
+      <Seo />
       <Masthead availableForWork={profile.availableForWork} />
       <div className="flex-1">
         <Outlet />

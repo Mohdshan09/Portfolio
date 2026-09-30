@@ -8,7 +8,6 @@ import { CertificatesEducation } from '../../components/sections/CertificatesEdu
 import { Contact } from '../../components/sections/Contact';
 import { LatestDispatches } from '../../components/sections/LatestDispatches';
 import { dispatches } from '../../content/dispatches';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import {
   certificates,
   education,
@@ -20,8 +19,6 @@ import {
 } from '../../content/data';
 
 export function Home() {
-  useDocumentTitle();
-
   return (
     <main>
       <Hero profile={profile} />

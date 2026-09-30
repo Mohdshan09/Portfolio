@@ -1,11 +1,8 @@
 import { PageHeader } from '../../components/ui/PageHeader';
 import { DispatchRow } from '../../components/ui/DispatchRow';
 import { dispatches } from '../../content/dispatches';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 export function Dispatches() {
-  useDocumentTitle('Dispatches');
-
   return (
     <main className="mx-auto max-w-[1360px] px-4 py-16 sm:px-6 sm:py-24">
       <PageHeader

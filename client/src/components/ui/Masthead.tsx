@@ -91,7 +91,9 @@ export function Masthead({ availableForWork }: { availableForWork: boolean }) {
             <span className={cn('h-1.5 w-1.5', availableForWork ? 'bg-acid' : 'bg-ink-mute')} />
             {availableForWork ? 'OPEN TO WORK' : 'HEADS DOWN'}
           </span>
-          <span className="text-ink-mute">IST {time}</span>
+          <span className="text-ink-mute" suppressHydrationWarning>
+            IST {time}
+          </span>
           <button
             type="button"
             onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}

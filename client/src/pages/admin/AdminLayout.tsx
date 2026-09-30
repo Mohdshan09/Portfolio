@@ -3,6 +3,7 @@ import { Link, NavLink, Navigate, Outlet } from 'react-router-dom';
 import { logout, refreshSession, useIsAuthenticated } from '../../api/auth';
 import { useNoIndex } from './useNoIndex';
 import { cn } from '../../lib/cn';
+import { setOwnerBrowser } from '../../lib/analyticsOwner';
 
 const TABS = [
   { to: '/admin', label: 'INBOX', end: true },
@@ -18,6 +19,11 @@ export function AdminLayout() {
   useEffect(() => {
     if (!checked) void refreshSession().finally(() => setChecked(true));
   }, [checked]);
+
+  // Any browser you've logged in on is yours: stop counting its visits in analytics.
+  useEffect(() => {
+    if (authed) setOwnerBrowser(true);
+  }, [authed]);
 
   if (!checked) {
     return <p className="p-6 font-mono text-sm text-ink-dim">authenticating…</p>;
