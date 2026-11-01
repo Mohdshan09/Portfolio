@@ -1,15 +1,11 @@
 import type { Project } from '../../content/types';
 import { formatMonthYear } from '../../lib/date';
 import { Tag } from './Tag';
+import { Link } from 'react-router-dom';
 
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <a
-      href={project.liveUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="brut group flex h-full flex-col bg-surface"
-    >
+    <div className="brut group flex h-full flex-col bg-surface">
       <div className="flex items-center justify-between border-b-2 border-line px-4 py-2 font-mono text-meta text-ink-mute">
         <span>
           {String(index).padStart(2, '0')} / {project.featured ? 'FEATURED' : 'PROJECT'}
@@ -46,10 +42,13 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             <Tag key={tech}>[{tech.toUpperCase()}]</Tag>
           ))}
         </div>
+        <Link to={`/projects/${project.slug}/blogs`} className="font-mono text-sm text-acid hover:text-acid-hover">
+          BUILD NOTES →
+        </Link>
         <div className="mt-auto pt-2 font-mono text-sm text-ink group-hover:text-acid-hover">
           VIEW LIVE →
         </div>
       </div>
-    </a>
+    </div>
   );
 }

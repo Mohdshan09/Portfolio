@@ -24,6 +24,9 @@ export const routes: RouteObject[] = [
         lazy: () =>
           import('./pages/admin/AdminAnalytics').then((m) => ({ Component: m.AdminAnalytics })),
       },
+      { path: 'blogs', lazy: () => import('./pages/admin/AdminBlogs').then((m) => ({ Component: m.AdminBlogs })) },
+      { path: 'blogs/new', lazy: () => import('./pages/admin/AdminBlogEditor').then((m) => ({ Component: m.AdminBlogEditor })) },
+      { path: 'blogs/:id', lazy: () => import('./pages/admin/AdminBlogEditor').then((m) => ({ Component: m.AdminBlogEditor })) },
     ],
   },
   {
@@ -31,6 +34,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: '/', element: <Home /> },
       { path: '/dispatches', element: <Dispatches /> },
+      { path: '/projects/:projectSlug/blogs', lazy: () => import('./pages/public/ProjectBlogs').then((m) => ({ Component: m.ProjectBlogs })) },
+      { path: '/blogs/:slug', lazy: () => import('./pages/public/BlogPost').then((m) => ({ Component: m.BlogPost })) },
       // Lazy: these pull in the Markdown renderer, which Home doesn't need.
       {
         path: '/dispatches/:slug',

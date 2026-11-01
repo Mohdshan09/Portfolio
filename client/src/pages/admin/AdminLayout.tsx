@@ -8,6 +8,7 @@ import { setOwnerBrowser } from '../../lib/analyticsOwner';
 const TABS = [
   { to: '/admin', label: 'INBOX', end: true },
   { to: '/admin/analytics', label: 'ANALYTICS', end: false },
+  { to: '/admin/blogs', label: 'BLOGS', end: false },
 ];
 
 /** Guards every /admin page: silent refresh on first load, otherwise off to /admin/login. */

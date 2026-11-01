@@ -8,6 +8,7 @@ import { contactRouter } from './routes/contact.routes';
 import { trackRouter } from './routes/track.routes';
 import { authRouter } from './routes/auth.routes';
 import { adminRouter } from './routes/admin.routes';
+import { adminBlogsRouter, blogsRouter } from './routes/blogs.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { requestContext } from './middleware/requestContext';
 import { ApiError } from './utils/ApiError';
@@ -38,6 +39,8 @@ app.use('/api/contact', contactRouter);
 app.use('/api/track', trackRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/admin/blogs', adminBlogsRouter);
+app.use('/api/blogs', blogsRouter);
 
 app.use((_req, _res, next) => {
   next(new ApiError(404, 'NOT_FOUND', 'Resource not found'));

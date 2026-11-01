@@ -44,3 +44,38 @@ model PageView {
 
   @@index([createdAt])
 }
+
+enum BlogStatus {
+  draft
+  published
+}
+
+/// Long-form project documentation. `projectSlug` maps to the portfolio's project catalogue.
+model ProjectBlog {
+  id          String     @id @default(cuid())
+  projectSlug String     @db.VarChar(80)
+  title       String     @db.VarChar(160)
+  slug        String     @unique @db.VarChar(180)
+  excerpt     String     @db.VarChar(320)
+  status      BlogStatus @default(draft)
+  chapters    Json
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  publishedAt DateTime?
+  feedback    BlogFeedback[]
+
+  @@index([projectSlug, status, publishedAt(sort: Desc)])
+}
+
+/// Suggestions from readers; they are never public and only admins can manage them.
+model BlogFeedback {
+  id        String      @id @default(cuid())
+  blogId    String
+  name      String      @db.VarChar(60)
+  email     String?     @db.VarChar(254)
+  message   String      @db.VarChar(1200)
+  createdAt DateTime    @default(now())
+  blog      ProjectBlog @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@index([blogId, createdAt(sort: Desc)])
+}
