@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
 const slug = z.string().trim().toLowerCase().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(180);
+// Hex, or Excalidraw's explicit "transparent" — whitelisted because the value is echoed into SVG paint attributes.
+const color = z.string().trim().regex(/^(#[0-9a-f]{3,8}|transparent)$/i).max(24).optional();
 export const diagramElementSchema = z.object({
   id: z.string().max(80), type: z.enum(['rectangle', 'ellipse', 'arrow', 'text']), x: z.number(), y: z.number(),
   width: z.number().min(1).max(2000), height: z.number().min(1).max(2000), text: z.string().max(500).optional(),
+  backgroundColor: color, strokeColor: color,
 });
 export const chapterSchema = z.object({
   id: z.string().max(80), title: z.string().trim().min(1).max(140), content: z.string().max(30000),

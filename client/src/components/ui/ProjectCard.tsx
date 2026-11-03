@@ -43,7 +43,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           ))}
         </div>
         <Link to={`/projects/${project.slug}/blogs`} className="font-mono text-sm text-acid hover:text-acid-hover">
-          BUILD NOTES →
+          VIEW BLOGS →
         </Link>
         <div className="mt-auto pt-2 font-mono text-sm text-ink group-hover:text-acid-hover">
           VIEW LIVE →
